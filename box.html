@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- 쓰임에 따라 화면 전체를 쓸 경우(h1)가 있으며, 자신의 크기 만큼의 부피를 쓸 경우(a)가 있음 -->
+    <style>
+      /* 레벨을 바꾸고자 할 때는 display:inline; 또는 display:block; / 보이지 않게 하기 위해서는 display:none;
+      h1 {  // block level element
+        border-width: 5px;
+        border-color: red;
+        border-style: solid;
+      }
+      a { // inline element
+        border-width: 5px;
+        border-color: red;
+        border-style: solid;
+      }
+      */
+
+      /* 중복 없애기
+      h1, a {
+        border: 5px solid red;
+      }
+      */
+
+      h1 {
+        border: 5px solid red;
+        padding: 20px; /* 안쪽 */
+        margin: 20px; /* 바깥쪽 */
+        display: block;
+        width: 100px; /* 태그의 크기가 변경 */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>CSS</h1>
+    <h1>CSS</h1>
+    Cascading Style Sheets (<a href="https://opentutorials.org/course/3086/18319">CSS</a>) is a style sheet language used for describing the presentation of a document written in a markup language.
+  </body>
+</html>
