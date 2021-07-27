@@ -12,6 +12,7 @@
     nightDayHandler(this);
   ">
   <ol>
+    /*
     <li><a onclick="
       fetch('html').then(function(response) {
         response.text().then(function(text) {
@@ -30,10 +31,22 @@
           document.querySelector('article').innerHTML = text;
         })
       });">JavaScript</a></li>
+      */
+      <li><a onclick="fetchPage('html')">HTML</a></li>
+      <li><a onclick="fetchPage('css')">CSS</a></li>
+      <li><a onclick="fetchPage('javascript')">JavaScript</a></li>
   </ol>
   <article>
     
   </article>
-  </p>
+  <script> // 재활용을 위해 코드를 묶기 (리팩토링)
+    function fetchPage(name) {
+      fetch(name).then(function(respose) {
+        respose.text().then(function(text) {
+          document.querySelector('article').innerHTML = text;
+        })
+      });
+    }
+  </script>
 </body>
 </html>
