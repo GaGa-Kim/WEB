@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+      div {
+        border: 10px solid green;
+        font-size: 60px;
+      }
+      /* 미디어 쿼리 : 스크린의 크기가 800px보다 커지면 보이지 않도록 screen width > 800px */
+      @media(min-width: 800px)  {
+        div {
+          display: none;
+        }
+      }
+      /* 미디어 쿼리 : 스크린의 크기가 800px보다 작으면 보이지 않도록 screen width < 800px
+      @media(max-width: 800px)  {
+        div {
+          display: none;
+        }
+      } */
+    </style>
+  </head>
+  <body>
+    <div>
+      Responsive
+    </div>
+  </body>
+</html>

@@ -1,14 +1,13 @@
-<!-- 태그의 종류 - 강조표시 : <strong> / 밑줄 : <u> / 제목 : <h1> / 줄바꿈 : <br> / 단락 : <p> /
-                  이미지 : <img> / 목차 : <li> / 목록 구분 : <ul> (unordered list), <ol> (ordered list)
-                  웹 페이지 제목 : <title> / 본문을 설명 : <head> / 본문 : <body> / body와 head 태그를 감싸기 : <html> / HTML로서 만들어졌다 : <!DOCTYPE html> /
-                  링크 : <a> (anchor) (href : HyperText Reference) (_blank는 새 창에 열리게 함) -->
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>WEB1 - JavaScript</title>
   <meta name="김가경" charset="utf-8">
-  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="colors.js"></script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics (방문자 수 추적)-->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-CL7GZEVTHV"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -17,17 +16,187 @@
 
     gtag('config', 'G-CL7GZEVTHV');
   </script>
+
+  <!-- 자바스크립트 코드를 가져와서 함수로 만듦
+       그리고 이를 중복이 발생하지 않도록 여러 개의 함수로 쪼개서 만들어 줌
+       그리고선 객체(Body, Links)를 만들고 이를 사용해서 서로 연관된 함수와 변수들을 그룹핑해서 정리 정돈 -->
+  <script>
+    /*
+    function LinksSetColor(color) {  // 링크 글씨 색상 함
+      var alist = document.querySelectorAll('a');
+      var i = 0;
+      while(i < alist.length) {
+        alist[i].style.color = color;
+        i = i + 1;
+      }
+    }
+
+    function BodySetColor(color) {  // 글씨 색상 함
+      document.querySelector('body').style.color = color;
+      // document는 객체, querySelector는 document 객체에 속해 있는 함수 (즉, 메소드)
+    }
+
+    function BodySetBackgroundColor(color) {  // 배경 색상 함수
+      document.querySelector('body').style.backgroundColor = color;
+    }
+
+    function nightDayHandler(self) {  // 색상 변경 버튼 함수 (객체 전)
+      var target = document.querySelector('body');
+      if (self.value == 'night') {
+        BodySetBackgroundColor('black');
+        BodySetColor('white');
+        self.value = 'day';
+
+        LinksSetColor('powderblue');
+      } else {
+        BodySetBackgroundColor('white');
+        BodySetColor('black');
+        self.value = 'night';
+
+        LinksSetColor('blue');
+      }
+    } */
+
+    /* colors.js 파일로 넣어서 쪼갬
+    // 객체(Body, Links)
+    var Body = {
+      SetColor : function(color) {
+        document.querySelector('body').style.color = color;
+      },
+      SetBackgroundColor : function(color) {
+        document.querySelector('body').style.backgroundColor = color;
+      }
+    }
+
+    var Links = {
+      SetColor : function(color) {
+        var alist = document.querySelectorAll('a');
+        var i = 0;
+        while(i < alist.length) {
+          alist[i].style.color = color;
+          i = i + 1;
+        }
+      }
+    }
+
+    function nightDayHandler(self) {  // 색상 변경 버튼 함수 (객체 O)
+      var target = document.querySelector('body');
+      if (self.value == 'night') {
+        Body.SetBackgroundColor('black');
+        Body.SetColor('white');
+        self.value = 'day';
+
+        Links.SetColor('powderblue');
+      } else {
+        Body.SetBackgroundColor('white');
+        Body.SetColor('black');
+        self.value = 'night';
+
+        Links.SetColor('blue');
+      }
+    } */
+  </script>
 </head>
+
 <body>
   <h1><a href="index.html">WEB</a></h1>
-  <ol>
-    <li><a href="1.html">HTML</a></li>
-    <li><a href="2.html">CSS</a></li>
-    <li><a href="3.html">JavaScript</a></li>
-  </ol>
-  <h2>JavaScript</h2>
-  <p>
-    JavaScript (/ˈdʒɑːvəˌskrɪpt/[6]), often abbreviated as JS, is a high-level, dynamic, weakly typed, prototype-based, multi-paradigm, and interpreted programming language. Alongside HTML and CSS, JavaScript is one of the three core technologies of World Wide Web content production. It is used to make webpages interactive and provide online programs, including video games. The majority of websites employ it, and all modern web browsers support it without the need for plug-ins by means of a built-in JavaScript engine. Each of the many JavaScript engines represent a different implementation of JavaScript, all based on the ECMAScript specification, with some engines not supporting the spec fully, and with many engines supporting additional features beyond ECMA.
-  </p>
+  <div id="grid">
+    <ol>
+      <li><a href="1.html">HTML</a></li>
+      <li><a href="2.html">CSS</a></li>
+      <li><a href="3.html">JavaScript</a></li><br>
+
+      <!-- body 태그 사용
+      <input type="button" value="night" onclick="
+      document.querySelector('body').style.backgroundColor= 'black';
+      document.querySelector('body').style.color= 'white';
+      ">
+      <input type="button" value="day" onclick="
+      document.querySelector('body').style.backgroundColor= 'white';
+      document.querySelector('body').style.color= 'black';
+      "> -->
+
+      <!-- 아이디 태그 사용
+      <body id="target">
+           <input type="button" value="night" onclick="
+           document.querySelector('#target').style.backgroundColor= 'black';
+           document.querySelector('#target').style.color= 'white';
+           "> -->
+
+      <!-- 중복 O
+      <input id="night_day" type="button" value="night" onclick="
+      if (document.querySelector('#night_day').value == 'night') {
+        document.querySelector('body').style.backgroundColor= 'black';
+        document.querySelector('body').style.color= 'white'
+        document.querySelector('#night_day').value = 'day';
+      } else {
+        document.querySelector('body').style.backgroundColor= 'white';
+        document.querySelector('body').style.color= 'black';
+        document.querySelector('#night_day').value = 'night';
+      }"> -->
+
+      <!-- this와 target 변수를 사용하여 중복 X, 훨씬 간결
+           그리고 배열과 반복문을 활용하여 링크 글자의 색상을 변경 시킴
+      <input type="button" value="night" onclick="
+      var target = document.querySelector('body');
+      if (this.value == 'night') {
+        target.style.backgroundColor= 'black';
+        target.style.color= 'white'
+        this.value = 'day';
+
+        var alist = document.querySelectorAll('a');
+        var i = 0;
+        while(i < alist.length) {
+          alist[i].style.color = 'powderblue';
+          i = i + 1;
+        }
+
+      } else {
+        target.style.backgroundColor= 'white';
+        target.style.color= 'black';
+        this.value = 'night';
+
+        var alist = document.querySelectorAll('a');
+        var i = 0;
+        while(i < alist.length) {
+          alist[i].style.color = 'blue';
+          i = i + 1;
+        }
+      }"> -->
+
+      <!-- 위에 있는 nightDayHandler라는 함수를 가져와서 실행시키도록 함 -->
+      <input type="button" value="night" onclick="nightDayHandler(this)">
+
+    </ol>
+    <div id="article">
+      <h2>JavaScript</h2>
+      <p>
+        JavaScript (/ˈdʒɑːvəˌskrɪpt/[6]), often abbreviated as JS, is a high-level, dynamic, weakly typed, prototype-based, multi-paradigm, and interpreted programming language. Alongside HTML and CSS, JavaScript is one of the three core technologies of World Wide Web content production. It is used to make webpages interactive and provide online programs, including video games. The majority of websites employ it, and all modern web browsers support it without the need for plug-ins by means of a built-in JavaScript engine. Each of the many JavaScript engines represent a different implementation of JavaScript, all based on the ECMAScript specification, with some engines not supporting the spec fully, and with many engines supporting additional features beyond ECMA.
+      </p>
+      <!-- 리팩토링 중복의 제거
+      <input type="button" value="night" onclick="
+      if (this.value == 'night') {
+        document.querySelector('body').style.backgroundColor= 'black';
+        document.querySelector('body').style.color= 'white'
+        this.value = 'day';
+      } else {
+        document.querySelector('body').style.backgroundColor= 'white';
+        document.querySelector('body').style.color= 'black';
+        this.value = 'night';
+      }">
+
+      <input type="button" value="night" onclick="
+      if (this.value == 'night') {
+        document.querySelector('body').style.backgroundColor= 'black';
+        document.querySelector('body').style.color= 'white'
+        this.value = 'day';
+      } else {
+        document.querySelector('body').style.backgroundColor= 'white';
+        document.querySelector('body').style.color= 'black';
+        this.value = 'night';
+      }"> -->
+      <input type="button" value="night" onclick="nightDayHandler(this)">
+    </div>
+  </div>
 </body>
 </html>

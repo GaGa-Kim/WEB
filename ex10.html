@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <h1>Object</h1>
+    <h2>Create</h2>
+    <script> // 배열은 대괄호, 객체는 중괄호 (객체에서는 함수 > 메소드, 변수 > 프로퍼티)
+      var coworker = {
+        "programmer" : "egoing",
+        "designer" : "leezche"
+      };
+      document.write("programmer : "+coworker.programmer+"<br>");
+      document.write("designer : "+coworker.designer+"<br>");
+      coworker.bookkeeper = "duru";
+      document.write("bookkeeper : "+coworker.bookkeeper+"<br>");
+      coworker["data scientist"] = "taeho";  // 대괄호를 사용하여 이렇게 사용 시 띄어쓰기 가능
+      document.write("data scientist : "+coworker["data scientist"]+"<br>");
+    </script>
+
+    <h2>Iterate</h2>
+    <script>
+      for(var key in coworker) {  // 반복문
+        document.write(key+"<br>");
+      }
+      document.write("<br>");
+
+      for(var key in coworker) {  // 반복문
+        document.write(coworker[key]+"<br>");
+      }
+      document.write("<br>");
+
+      for(var key in coworker) {  // 반복문
+        document.write(key+ ' : ' +coworker[key]+"<br>");
+      }
+    </script>
+
+    <h2>Property & Method</h2>
+    <script>
+      /* showAll 메소드(함수) 추가 = function showAll() {} 과 같음
+      coworker.showAll = function() {
+        for(var key in coworker) {  // 위의 반복문
+          document.write(key+ ' : ' +coworker[key]+"<br>");
+        }
+      }
+      coworker.showAll();
+      */
+
+      coworker.showAll = function() {  // 위의 코드에서 coworker라는 객체의 이름이 바뀔 경우를 생각하여 this로 바꾸어 줌
+        for(var key in this) {  // 위의 반복문
+          document.write(key+ ' : ' +this[key]+"<br>");
+        }
+      }
+      coworker.showAll();
+
+    </script>
+  </body>
+</html>
