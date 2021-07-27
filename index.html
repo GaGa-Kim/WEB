@@ -13,7 +13,7 @@
   <input id="night_day" type="button" value="night" onclick="
     nightDayHandler(this);
   ">
-  <ol>
+  <ol id="nav">
     <!--
     <li><a onclick="
       fetch('html').then(function(response) {
@@ -40,9 +40,10 @@
       <li><a onclick="fetchPage('javascript')">JavaScript</a></li> -->
       
       <!-- fragment identifier를 이용한 초기 페이지 기능 구현 (hash 사용) -->
+      <!-- 글목록 Ajax로 구현
       <li><a href="#!html" onclick="fetchPage('html')">HTML</a></li>
       <li><a href="#!css" onclick="fetchPage('css')">CSS</a></li>
-      <li><a href="#!javascript" onclick="fetchPage('javascript')">JavaScript</a></li>
+      <li><a href="#!javascript" onclick="fetchPage('javascript')">JavaScript</a></li> -->
   </ol>
   <article>
     
@@ -60,6 +61,13 @@
     } else {
       fetchPage('welcome');
     }
+    
+    // 글목록 Ajax 구현
+      fetch('list').then(function(respose) {
+        respose.text().then(function(text) {
+          document.querySelector('#nav').innerHTML = text; // 태그 이름이 nav가 아닌, id값이 nav인 것으로 사용하기 위하여 #을 사용 
+        })
+      });
   </script>
 </body>
 </html>
