@@ -7,7 +7,9 @@
   <script src="colors.js"></script>
 </head>
 <body>
-  <h1><a href="index.html">WEB</a></h1>
+  <!--
+  <h1><a href="index.html">WEB</a></h1> -->
+  <h1><a href="#!welcome" onclick="fetchPage('welcome')">WEB</a></h1>
   <input id="night_day" type="button" value="night" onclick="
     nightDayHandler(this);
   ">
@@ -31,9 +33,16 @@
           document.querySelector('article').innerHTML = text;
         })
       });">JavaScript</a></li> -->
+      
+      <!--
       <li><a onclick="fetchPage('html')">HTML</a></li>
       <li><a onclick="fetchPage('css')">CSS</a></li>
-      <li><a onclick="fetchPage('javascript')">JavaScript</a></li>
+      <li><a onclick="fetchPage('javascript')">JavaScript</a></li> -->
+      
+      <!-- fragment identifier를 이용한 초기 페이지 기능 구현 (hash 사용) -->
+      <li><a href="#!html" onclick="fetchPage('html')">HTML</a></li>
+      <li><a href="#!css" onclick="fetchPage('css')">CSS</a></li>
+      <li><a href="#!javascript" onclick="fetchPage('javascript')">JavaScript</a></li>
   </ol>
   <article>
     
@@ -45,6 +54,11 @@
           document.querySelector('article').innerHTML = text;
         })
       });
+    }
+    if(location.hash) {  // 사용자가 자신이 보고 있는 정보를 다른 사람에게 공유 가능하게 하도록 (앞에 두 개인 #!은 빼고 부터 해쉬값을 읽어옴)
+      fetchPage(location.hash.substr(2));
+    } else {
+      fetchPage('welcome');
     }
   </script>
 </body>
