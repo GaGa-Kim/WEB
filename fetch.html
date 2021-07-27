@@ -26,7 +26,10 @@
       /* 해설
       fetch('html') -> 인자로 전달된 데이터를 서버에게 요청
       then -> 서버가 응답할 때까지 다른 일을 하기 위해 then 기능을 사용
-      예) 응답이 끝나면 callbackme라는 함수를 실행시키도록 약속 */
+      예) 응답이 끝나면 callbackme라는 함수를 실행시키도록 약속 
+          만약 동기(synchronous)로 실행되었다면 요청이 시작되고 끝날 때까지 콘솔창에 1과 2가 실행되면 안됨. 즉 멈춰있어야 함. 
+          반대로 비동기적인(Asynchronous) 실행은 fetch가 실행되고 있는 동안에 다른 코드들이 실행되어 콘솔창에 1과 2가 동시에 실행됨 
+          밑은 동시에 실행되어 1 2 response end 출력이 됨. 즉, Ajax의 A는 비동기의 A */
       
           function callbackme() {
             console.log('response end');
