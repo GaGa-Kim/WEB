@@ -16,11 +16,22 @@
         })
       }) */
       
+      /*
       fetch('html').then(function(response){
         response.text().then(function(text){
           document.querySelector('article').innerHTML = text;
         })
-      }) 
+      }) */
+      
+      /* 해설
+      fetch('html') -> 인자로 전달된 데이터를 서버에게 요청
+      then -> 서버가 응답할 때까지 다른 일을 하기 위해 then 기능을 사용
+      예) 응답이 끝나면 callbackme라는 함수를 실행시키도록 약속 */
+      
+          function callbackme() {
+            console.log('response end');
+          }
+          fetch('html').then(callbackme);
       ">
   </body>
 </html>
