@@ -62,10 +62,21 @@
       fetchPage('welcome');
     }
     
-    // 글목록 Ajax 구현
+    // 글목록 Ajax 구현, 글목록의 중복을 없애기 위해서 ,를 구분자로 하여 코드 완성
       fetch('list').then(function(respose) {
         respose.text().then(function(text) {
-          document.querySelector('#nav').innerHTML = text; // 태그 이름이 nav가 아닌, id값이 nav인 것으로 사용하기 위하여 #을 사용 
+          var items = text.split(','); // ['html', 'css', 'javascript']
+          var i = 0;
+          var tags = '';
+          while(i<items.length) {
+            var item = items[i];
+            // 배열에서 ,와 글자 빼고 없애기 위해서
+            item = item.trim();
+            var tag = '<li><a href="#!'+item'" onclick="fetchPage(\''+item+\')">'+item+'</a></li>';
+            tags = tags + tag;
+            i = i + 1;
+          }
+          document.querySelector('#nav').innerHTML = tags; // 태그 이름이 nav가 아닌, id값이 nav인 것으로 사용하기 위하여 #을 사용 
         })
       });
   </script>
