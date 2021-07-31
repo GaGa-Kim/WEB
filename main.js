@@ -1,9 +1,10 @@
 var http = require('http');  // http를 요구하는 모듈 
 var fs = require('fs');  // fs를 요구하는 모듈
 var url = require('url');  // url을 요구하는 모듈 (url이라는 모듈)
+var qs = require('querystring');  // node.js가 가지고 있는 모듈
 
 // 중복을 제거하기 위해 함수를 만듦
-function templateHTML(title, list, body) {
+function templateHTML(title, list, body, control) {
   return `
   <!doctype html>
   <html>
@@ -14,10 +15,11 @@ function templateHTML(title, list, body) {
   <body>
     <h1><a href="/">WEB</a></h1>
     ${list}
+    ${control}
     ${body}
   </body>
   </html>
-  `
+  `;
 }
 
 function templateList(filelist) {
@@ -33,7 +35,8 @@ function templateList(filelist) {
 
 // URL을 통해서 입력된 값을 사용하는 방법 (query string에 따라 다르게 동작) -> query에서 id를 찾아서 이를 이용 -> localhost:3000/?id=HTML -> 이 경우 HTML
 // http://opentutorials.org:3000/main?id=HTML&page=12의 경우 http는 protocol, opentutorials.org는 host(domain), 3000은 port, main은 path, id=HTML&page=12는 query string
-var app = http.createServer(function(request,response){
+// createServer에 전달된 callback 함수, node.js로 웹브라우저가 접속이 들어올 때마다 callback 함수를 호출, 요청할 때 웹브라우저가 보낸 정보, 응답할 때 우리가 웹브라우저에게 전송할 정보를 인자로 가짐
+var app = http.createServer(function(request,response){  
     var _url = request.url;
     var queryData = url.parse(_url, true).query;  // url에서 query string 부분만 가져온 것    
     
@@ -64,7 +67,7 @@ var app = http.createServer(function(request,response){
           var description = 'Hello, Node.js';
           
           var list = templateList(filelist);
-          var template = templateHTML(title, list, `<h2>${title}</h2>${description}`);
+          var template = templateHTML(title, list, `<h2>${title}</h2>${description}`, `<a href="/create">create</a>`);
           response.writeHead(200); 
           response.end(template);
         })
@@ -106,13 +109,110 @@ var app = http.createServer(function(request,response){
             </body>
             </html>
             `; */
-            var template = templateHTML(title, list, `<h2>${title}</h2>${description}`);
+            var template = templateHTML(title, list, 
+              `<h2>${title}</h2>${description}`, 
+              `<a href="/create">create</a> 
+               <a href="/update?id=${title}">update</a>
+               <form action="delete_process" method="post">
+                 <input type="hidden" name="id" value="${title}">
+                 <input type="submit" value="delete">
+               </form>`);
             response.writeHead(200); // 성공적
             response.end(template);
           });  
         });
       }
-    } else {
+    } else if(pathname === '/create') { // WEB을 눌렀을 때(홈)의 코드를 활용하여 create를 클릭할 경우 글생성 폼을 가져오도록 함
+      fs.readdir('./data', function(error, filelist){
+        console.log(filelist); 
+        var title = 'WEB - create';
+        
+        var list = templateList(filelist);
+        var template = templateHTML(title, list, `
+          <form action="/create_process" method="post">
+            <p><input type="text" name="title" placeholder="title"></p>
+            <p>
+              <textarea name="description" placeholder="description"></textarea>
+            </p>
+            <p>
+              <input type="submit">
+            </p>
+          </form>
+          `, '');
+        response.writeHead(200); 
+        response.end(template);
+      });
+    } else if(pathname === '/create_process') { // post 방식으로 전송된 데이터를 node.js 안에서 가져오기
+      var body = '';
+      // callback을 이용하여 웹브라우저 post방식으로 데이터를 전송할 때 데이터가 많으면 조각 조각의 양을 서버에서 수신할 때마다 서버는 data 다음의 callback 함수를 호출. 그리고선 data라는 인자로 수신한 정보를 줌.
+      request.on('data', function(data) { 
+        body = body + data; // callback이 실행될 때마다 데이터를 추가
+      });
+      request.on('end', function() {  // 더이상 들어올 정보가 없으면 end 다음의 callback함수를 호출 (정보 수신 끝)
+        var post = qs.parse(body);  // 지금까지 저장한 body를 입력값으로 줌, post 데이터에 post 정보를 줌
+        console.log(post.title);
+        console.log(post.description);
+        var title = post.title;
+        var description = post.description;
+        fs.writeFile(`data/${title}`, description, 'utf8', function(err) {
+          response.writeHead(302, {Location: `/?id=${title}`});  // 파일을 만든 후 리다이렉션을 통해 바로 확인하기, 302는 페이지를 리다이렉션 시키라는 것
+          response.end('success'); 
+        })
+      });
+    } else if(pathname === '/update') {
+      fs.readdir('./data', function(error, filelist){
+        fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description) {
+          var title = queryData.id;  
+          var list = templateList(filelist);
+          // 사용자가 수정하고자하는 파일과 우리가 수정해야하는 파일을 구분해주기 위해서 hidden인 input 추가 (타이틀 이름이 바뀔수도 있으므로)
+          var template = templateHTML(title, list, `
+            <form action="/update_process" method="post">
+            <input type="hidden" name="id" value="${title}"> 
+              <p><input type="text" name="title" value="${title}"></p>
+              <p>
+                <textarea name="description">${description}</textarea>
+              </p>
+              <p>
+                <input type="submit">
+              </p>
+            </form>`, 
+            `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`);
+        response.writeHead(200); 
+        response.end(template);
+        });
+      });
+    } else if(pathname === '/update_process') {
+      var body = '';
+      request.on('data', function(data) { 
+        body = body + data; 
+      });
+      request.on('end', function() {  
+        var post = qs.parse(body);  
+        var id = post.id;
+        var title = post.title;
+        var description = post.description;
+        fs.rename(`data/${id}`, `data/${title}`, function(error) {
+          fs.writeFile(`data/${title}`, description, 'utf8', function(err) {
+            response.writeHead(302, {Location: `/?id=${title}`}); 
+            response.end(); 
+          })
+        });
+      });
+    } else if(pathname === '/delete_process') {
+      var body = '';
+      request.on('data', function(data) { 
+        body = body + data; 
+      });
+      request.on('end', function() {  
+        var post = qs.parse(body);  
+        var id = post.id;
+        fs.unlink(`data/${id}`, function(error) {
+          response.writeHead(302, {Location: `/`}); // 삭제 후 홈으로 돌아감
+          response.end(); 
+        })
+      });
+    }
+    else {
       response.writeHead(404);  
       response.end('Not found');
     }
