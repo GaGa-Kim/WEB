@@ -3,7 +3,7 @@ var fs = require('fs');  // fs를 요구하는 모듈
 var url = require('url');  // url을 요구하는 모듈 (url이라는 모듈)
 var qs = require('querystring');  // node.js가 가지고 있는 모듈
 
-// 중복을 제거하기 위해 함수를 만듦
+/* 중복을 제거하기 위해 함수를 만듦, 객체를 통해 templateHTML과 templateList를 그룹핑 -> 리팩토링
 function templateHTML(title, list, body, control) {
   return `
   <!doctype html>
@@ -20,7 +20,7 @@ function templateHTML(title, list, body, control) {
   </body>
   </html>
   `;
-}
+} 
 
 function templateList(filelist) {
   var list = `<ul>`;
@@ -31,6 +31,37 @@ function templateList(filelist) {
   }    
   list = list+`</ul>`
   return list;
+} */
+
+// 객체를 통해 templateHTML과 templateList를 그룹핑
+var template = {
+  html:function (title, list, body, control) {
+    return `
+    <!doctype html>
+    <html>
+    <head>
+      <title>WEB1 - ${title}</title>
+      <meta charset="utf-8">
+    </head>
+    <body>
+      <h1><a href="/">WEB</a></h1>
+      ${list}
+      ${control}
+      ${body}
+    </body>
+    </html>
+    `;
+  },
+  list:function templateList(filelist) {
+    var list = `<ul>`;
+    var i = 0;
+    while(i < filelist.length) {
+      list = list + `<li><a href="/?id=${filelist[i]}">${filelist[i]}</a></li>`;
+      i = i + 1;
+    }    
+    list = list+`</ul>`
+    return list;
+  } 
 }
 
 // URL을 통해서 입력된 값을 사용하는 방법 (query string에 따라 다르게 동작) -> query에서 id를 찾아서 이를 이용 -> localhost:3000/?id=HTML -> 이 경우 HTML
@@ -66,10 +97,17 @@ var app = http.createServer(function(request,response){
           var title = 'Welcome';
           var description = 'Hello, Node.js';
           
+          /* 객체 사용 전
           var list = templateList(filelist);
           var template = templateHTML(title, list, `<h2>${title}</h2>${description}`, `<a href="/create">create</a>`);
           response.writeHead(200); 
-          response.end(template);
+          response.end(template); */
+          
+          // 객체 사용 후
+          var list = template.list(filelist);
+          var html = template.html(title, list, `<h2>${title}</h2>${description}`, `<a href="/create">create</a>`);
+          response.writeHead(200); 
+          response.end(html);
         })
       } else {
         fs.readdir('./data', function(error, filelist){
@@ -88,7 +126,7 @@ var app = http.createServer(function(request,response){
             i = i + 1;
           }    
           list = list+`</ul>` */
-          var list = templateList(filelist);
+          var list = template.list(filelist);
 
           // 파일 읽어오기 + 밑에 형식 부분 가져와서 수정
           fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description) {
@@ -109,7 +147,7 @@ var app = http.createServer(function(request,response){
             </body>
             </html>
             `; */
-            var template = templateHTML(title, list, 
+            var html = template.html(title, list, 
               `<h2>${title}</h2>${description}`, 
               `<a href="/create">create</a> 
                <a href="/update?id=${title}">update</a>
@@ -118,7 +156,7 @@ var app = http.createServer(function(request,response){
                  <input type="submit" value="delete">
                </form>`);
             response.writeHead(200); // 성공적
-            response.end(template);
+            response.end(html);
           });  
         });
       }
@@ -127,8 +165,8 @@ var app = http.createServer(function(request,response){
         console.log(filelist); 
         var title = 'WEB - create';
         
-        var list = templateList(filelist);
-        var template = templateHTML(title, list, `
+        var list = template.list(filelist);
+        var html = template.html(title, list, `
           <form action="/create_process" method="post">
             <p><input type="text" name="title" placeholder="title"></p>
             <p>
@@ -140,7 +178,7 @@ var app = http.createServer(function(request,response){
           </form>
           `, '');
         response.writeHead(200); 
-        response.end(template);
+        response.end(html);
       });
     } else if(pathname === '/create_process') { // post 방식으로 전송된 데이터를 node.js 안에서 가져오기
       var body = '';
@@ -163,9 +201,9 @@ var app = http.createServer(function(request,response){
       fs.readdir('./data', function(error, filelist){
         fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description) {
           var title = queryData.id;  
-          var list = templateList(filelist);
+          var list = template.list(filelist);
           // 사용자가 수정하고자하는 파일과 우리가 수정해야하는 파일을 구분해주기 위해서 hidden인 input 추가 (타이틀 이름이 바뀔수도 있으므로)
-          var template = templateHTML(title, list, `
+          var html = template.html(title, list, `
             <form action="/update_process" method="post">
             <input type="hidden" name="id" value="${title}"> 
               <p><input type="text" name="title" value="${title}"></p>
@@ -178,7 +216,7 @@ var app = http.createServer(function(request,response){
             </form>`, 
             `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`);
         response.writeHead(200); 
-        response.end(template);
+        response.end(html);
         });
       });
     } else if(pathname === '/update_process') {
