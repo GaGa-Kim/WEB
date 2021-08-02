@@ -2,6 +2,9 @@ var http = require('http');  // http를 요구하는 모듈
 var fs = require('fs');  // fs를 요구하는 모듈
 var url = require('url');  // url을 요구하는 모듈 (url이라는 모듈)
 var qs = require('querystring');  // node.js가 가지고 있는 모듈
+var template = require('./lib/template.js')// 모듈 사용
+var path = require('path'); // 디렉토리를 타고 올라가 보안의 위험이 생기는 것을 방지하기 위해 사용
+var sanitizeHtml = require('sanitize-html');  // 출력정보에 대한 보안을 위해 외부 모듈인 sanitize-html을 사용 (create나 update를 사용할 때 그 안에 스크립트나 링크 등의 예민한 것을 사용하여 보안의 위험에 생기는 것을 방지하기 위해 사용)
 
 /* 중복을 제거하기 위해 함수를 만듦, 객체를 통해 templateHTML과 templateList를 그룹핑 -> 리팩토링
 function templateHTML(title, list, body, control) {
@@ -33,7 +36,7 @@ function templateList(filelist) {
   return list;
 } */
 
-// 객체를 통해 templateHTML과 templateList를 그룹핑
+/* 객체를 통해 templateHTML과 templateList를 그룹핑 -> 모듈을 이용하여 밖으로 꺼냄
 var template = {
   html:function (title, list, body, control) {
     return `
@@ -62,13 +65,12 @@ var template = {
     list = list+`</ul>`
     return list;
   } 
-}
+} */
 
 // URL을 통해서 입력된 값을 사용하는 방법 (query string에 따라 다르게 동작) -> query에서 id를 찾아서 이를 이용 -> localhost:3000/?id=HTML -> 이 경우 HTML
 // http://opentutorials.org:3000/main?id=HTML&page=12의 경우 http는 protocol, opentutorials.org는 host(domain), 3000은 port, main은 path, id=HTML&page=12는 query string
 // createServer에 전달된 callback 함수, node.js로 웹브라우저가 접속이 들어올 때마다 callback 함수를 호출, 요청할 때 웹브라우저가 보낸 정보, 응답할 때 우리가 웹브라우저에게 전송할 정보를 인자로 가짐
 var app = http.createServer(function(request,response){  
-    var _url = request.url;
     var queryData = url.parse(_url, true).query;  // url에서 query string 부분만 가져온 것    
     
     // 사용자가 루트로 접근했는지 아닌지 구분. 즉, localhost:3000 뒤에 path 정보가 붙지 않는 것
@@ -111,6 +113,7 @@ var app = http.createServer(function(request,response){
         })
       } else {
         fs.readdir('./data', function(error, filelist){
+          var filteredID = path.parse(queryData.id).base;  // 보안을 위해
           /* 이를 참고하여 밑을 만듦 
           var list = `<ul>
             <li><a href="/?id=HTML">HTML</a></li>
@@ -129,8 +132,12 @@ var app = http.createServer(function(request,response){
           var list = template.list(filelist);
 
           // 파일 읽어오기 + 밑에 형식 부분 가져와서 수정
-          fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description) {
+          fs.readFile(`data/${filteredID}`, 'utf8', function(err, description) {
             var title = queryData.id;  // url에서 query string의 id를 가져와서 이를 title로 하여 문서의 제목(HTML, CSS, JavaScript)을 표현
+            var sanitizedTitle = sanitizeHtml(title);  // 보안을 위해 소독
+            var sanitizedDescription = sanitizeHtml(description, {
+              allowedTags:['h1']
+            }); 
             /* 함수로 중복 제거
             var template = `  
             <!doctype html>
@@ -147,12 +154,12 @@ var app = http.createServer(function(request,response){
             </body>
             </html>
             `; */
-            var html = template.html(title, list, 
-              `<h2>${title}</h2>${description}`, 
+            var html = template.html(sanitizedTitle, list, 
+              `<h2>${sanitizedTitle}</h2>${sanitizedDescription}`, 
               `<a href="/create">create</a> 
-               <a href="/update?id=${title}">update</a>
+               <a href="/update?id=${sanitizedTitle}">update</a>
                <form action="delete_process" method="post">
-                 <input type="hidden" name="id" value="${title}">
+                 <input type="hidden" name="id" value="${sanitizedTitle}">
                  <input type="submit" value="delete">
                </form>`);
             response.writeHead(200); // 성공적
@@ -199,7 +206,8 @@ var app = http.createServer(function(request,response){
       });
     } else if(pathname === '/update') {
       fs.readdir('./data', function(error, filelist){
-        fs.readFile(`data/${queryData.id}`, 'utf8', function(err, description) {
+        var filteredID = path.parse(queryData.id).base;  // 보안을 위해
+        fs.readFile(`data/${filteredID}`, 'utf8', function(err, description) {
           var title = queryData.id;  
           var list = template.list(filelist);
           // 사용자가 수정하고자하는 파일과 우리가 수정해야하는 파일을 구분해주기 위해서 hidden인 input 추가 (타이틀 이름이 바뀔수도 있으므로)
@@ -244,7 +252,8 @@ var app = http.createServer(function(request,response){
       request.on('end', function() {  
         var post = qs.parse(body);  
         var id = post.id;
-        fs.unlink(`data/${id}`, function(error) {
+        var filteredID = path.parse(id).base;  // 보안을 위해
+        fs.unlink(`data/${filteredID}`, function(error) {
           response.writeHead(302, {Location: `/`}); // 삭제 후 홈으로 돌아감
           response.end(); 
         })
