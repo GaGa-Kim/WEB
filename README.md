@@ -1,2 +1,2 @@
 # WEB_nodejs-mysql
- 생활코딩 Node.js-mysql 수강
+Node.js-mysql Study
