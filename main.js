@@ -1,8 +1,6 @@
 var http = require('http');
 var url = require('url');
-var qs = require('querystring');
-var template = require('./lib/template.js');
-var db = require('./lib/db');
+var topic = require('./lib/topic');
 
 var app = http.createServer(function(request,response){
     var _url = request.url;
@@ -23,7 +21,7 @@ var app = http.createServer(function(request,response){
           response.end(html);
         }); */
 
-        // mysql을 읽어와서 목록 보여주기
+        /* mysql을 읽어와서 목록 보여주기
         db.query(`SELECT * FROM topic`, function(err, topics){
           var title = 'Welcome';
           var description = 'Hello, Node.js';
@@ -34,7 +32,8 @@ var app = http.createServer(function(request,response){
           );
           response.writeHead(200);
           response.end(html);
-        });
+        }); */
+        topic.home(request, response);
       } else {
         /* 파일을 읽어와서 상세보기 보여주기
         fs.readdir('./data', function(error, filelist){
@@ -60,7 +59,7 @@ var app = http.createServer(function(request,response){
           });
         }); */
 
-        // mysql을 읽어와서 상세보기 보여주기 + join을 이용해서 저자 출력
+        /* mysql을 읽어와서 상세보기 보여주기 + join을 이용해서 저자 출력
         db.query(`SELECT * FROM topic`, function(err, topics){
           if(err) {
             throw err;  // 에러 발생 시 콘솔 출력 및 애플리케이션 중지
@@ -84,7 +83,8 @@ var app = http.createServer(function(request,response){
             response.writeHead(200);
             response.end(html);
           })
-        });
+        }); */
+        topic.page(request, response);
       }
     } else if(pathname === '/create'){
       /* 파일을 읽어와서 글 생성하기 
@@ -106,16 +106,16 @@ var app = http.createServer(function(request,response){
         response.end(html);
       }); */
 
-      // mysql을 읽어와서 글 생성하기 + join을 이용해서 저자 적용
+      /* mysql을 읽어와서 글 생성하기 + join을 이용해서 저자 적용
       db.query(`SELECT * FROM topic`, function(err, topics){
         db.query(`SELECT * FROM author`, function(err2, authors) {
-          /* template.js로 빼내기 - authorSelect
+          // template.js로 빼내기 - authorSelect
           var tag = '';
           var i = 0;
           while(i < authors.length) {
             tag += `<option value="${authors[i].id}">${authors[i].name}</option>`
             i++;
-          } */
+          } //
           var title = 'Create';
           var list = template.list(topics);
           var html = template.HTML(title, list,
@@ -135,21 +135,22 @@ var app = http.createServer(function(request,response){
           response.writeHead(200);
           response.end(html);
         });
-      });
+      }); */
+      topic.create(request, response);
     } else if(pathname === '/create_process'){
-      var body = '';
+      /* var body = '';
       request.on('data', function(data){
           body = body + data;
       });
       request.on('end', function(){
           var post = qs.parse(body);
-          /* 파일을 읽어와서 글 생성하기
+          // 파일을 읽어와서 글 생성하기
           var title = post.title;
           var description = post.description;
           fs.writeFile(`data/${title}`, description, 'utf8', function(err){
             response.writeHead(302, {Location: `/?id=${title}`});
             response.end();
-          }) */
+          }) //
 
           // mysql을 읽어와서 글 생성하기 + join을 이용해서 저자 선택하기
           db.query(`
@@ -161,10 +162,11 @@ var app = http.createServer(function(request,response){
                  throw err;
               }
               response.writeHead(302, {Location: `/?id=${result.insertId}`});
-              response.end();
+              response.end(); 
             }
-           )
-      });
+           ) 
+      }); */
+      topic.create_process(request, response);
     } else if(pathname === '/update'){
       /* 파일을 읽어와서 글 수정하기
       fs.readdir('./data', function(error, filelist){
@@ -192,7 +194,7 @@ var app = http.createServer(function(request,response){
         });
       }); */
 
-      // mysql을 읽어와서 글 수정하기 + join을 이용해서 저자 출력
+      /* mysql을 읽어와서 글 수정하기 + join을 이용해서 저자 출력
        db.query(`SELECT * FROM topic`, function(err, topics){
           if(err) {
             throw err;  
@@ -225,15 +227,17 @@ var app = http.createServer(function(request,response){
               response.end(html);
             });
           });
-        });
+        }); */
+        topic.update(request, response);
     } else if(pathname === '/update_process'){
+      /* 
       var body = '';
       request.on('data', function(data){
           body = body + data;
       });
       request.on('end', function(){
           var post = qs.parse(body);
-          /* 파일을 읽어와서 글수정하기
+          // 파일을 읽어와서 글수정하기
           var id = post.id;
           var title = post.title;
           var description = post.description;
@@ -242,7 +246,7 @@ var app = http.createServer(function(request,response){
               response.writeHead(302, {Location: `/?id=${title}`});
               response.end();
             })
-          }); */
+          }); //
 
           // mysql을 읽어와서 글 수정하기 + join을 이용해서 저자 수정
           db.query(`
@@ -251,15 +255,17 @@ var app = http.createServer(function(request,response){
             response.writeHead(302, {Location: `/?id=${post.id}`});
             response.end();
           })
-      });
+      }); */
+      topic.update_process(request, response);
     } else if(pathname === '/delete_process'){
+      /*
       var body = '';
       request.on('data', function(data){
           body = body + data;
       });
       request.on('end', function(){
           var post = qs.parse(body);
-          // // mysql을 읽어와서 글 삭제하기
+          // mysql을 읽어와서 글 삭제하기
           db.query(`DELETE FROM topic WHERE id=?`, [post.id], function(err, result) {
             if(err) {
               throw err;
@@ -267,14 +273,15 @@ var app = http.createServer(function(request,response){
             response.writeHead(302, {Location: `/`});
             response.end();
           });
-          /* 파일을 읽어와서 글 삭제하기
+          // 파일을 읽어와서 글 삭제하기
           var id = post.id;
           var filteredId = path.parse(id).base;
           fs.unlink(`data/${filteredId}`, function(error){
             response.writeHead(302, {Location: `/`});
             response.end();
-          }) */
-      });
+          }) //
+      }); */
+      topic.delete_process(request, response);
     } else {
       response.writeHead(404);
       response.end('Not found');
