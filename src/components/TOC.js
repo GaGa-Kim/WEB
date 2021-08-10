@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
 
 class TOC extends Component {
+    // 성능을 위해서 사용, 
+    // 자기와 상관없는 일이 진행될 때는 밑의 render 함수를 계속 호출하지 않도록 함 
+    // (목록이 변했을 때만 render 함수가 호출되도록)
+    shouldComponentUpdate(newProps, newState) {  // 새롭게 바뀐 값(newProps.data)과 이전의 값(this.props.data) 접근 가능
+    // true일 경우 render 호출, false일 경우 render 호출x
+      if(this.props.data === newProps.data) {
+        return false;
+      }
+      return true;
+    }
     render() {
       var lists = [];
       var data = this.props.data;

@@ -1,8 +1,10 @@
-import './App.css';
-import TOC from "./components/TOC";
-import Content from "./components/Content";
-import Subject from "./components/Subject";
-import React, { Component } from 'react';
+import './App.css'
+import TOC from "./components/TOC"
+import ReadContent from "./components/ReadContent"
+import Subject from "./components/Subject"
+import React, { Component } from 'react'
+import Control from "./components/Control"
+import CreateContent from './components/CreateContent'
 
 /* function type
 function App() {
@@ -43,6 +45,7 @@ class App extends Component {
   //  컴포넌트를 외부에서 조작할 때는 props를, 내부적으로 상태를 관리할 때는 state를 사용
   constructor(props) {  // state 값을 초기화 -> 이를 통해 외부에서 알 수 없도록 은닉 (내부적으로 사용할 때는 state를 사용)
     super(props);
+    this.max_content_id = 3;
     this.state = {
       mode:'read',
       selected_content_id:2,
@@ -55,11 +58,12 @@ class App extends Component {
       ]
     }
   }
-  render() { // props, state가 바뀌면 render가 호출되어 다시 그려짐 (다시 실행) - 연결되는 하위 component들이 모두 rendering
-    var _title, _desc = null; 
+  render() { // props, state가 바뀌면 render가 호출되어 다시 그려짐 (다시 실행) - 연결되는 하위 component들이 모두 rendering, mode에 따라 달라짐
+    var _title, _desc, _article = null; 
     if(this.state.mode === 'welcome') {
       _title = this.state.welcome.title;
       _desc = this.state.welcome.desc;
+      _article = <ReadContent title={_title} desc={_desc}></ReadContent>
     } else if (this.state.mode === 'read') {
       var i = 0;
       while(i < this.state.contents.length) {
@@ -71,6 +75,39 @@ class App extends Component {
         }
         i = i + 1;
       }
+      _article = <ReadContent title={_title} desc={_desc}></ReadContent>
+    } else if (this.state.mode === 'create') {
+        _article = <CreateContent onSubmit={function(_title, _desc){
+        // add content to this.state.contents
+        this.max_content_id =  this.max_content_id + 1;
+
+        /* 1. push 사용 - original 데이터 변경 -> 성능 개선에 까다로움
+        this.state.contents.push(
+          {id:this.max_content_id, title:_title, desc:_desc}
+        ); 
+        this.setState(
+          {contents:this.state.contents}
+        ); */
+
+        /* 2. concat 사용 - original 데이터의 변경 없이 새로운 데이터를 추가하여 결합 (복제본 수정)
+        var _contents = this.state.contents.concat(
+          {id:this.max_content_id, title:_title, desc:_desc}
+        );
+        this.setState(
+          {contents:_contents}
+        ); */
+
+        // 3. push를 사용하면서 원본을 바꾸지 않는 방법 (Immutable - 불변 -> 원본에 대해서 불변)
+        var newContents = Array.from(this.state.contents); // 먼저 복제 (배열 복제)
+        // 객체 복제의 경우, Object.assign 사용 -> 예, a를 b로 복제) var b = Object.assign({}, a);
+        newContents.push(
+          {id:this.max_content_id, title:_title, desc:_desc}
+        );
+        this.setState(
+          {contents:newContents}
+        ); 
+
+      }.bind(this)}></CreateContent>
     }
     return (
       <div className="App">
@@ -102,7 +139,18 @@ class App extends Component {
           });
         }.bind(this)}
       data={this.state.contents}></TOC>
-      <Content title={_title} desc={_desc}></Content>
+      {/* Control.js 로 분리 
+      <ul>
+        <li><a href="/create">create</a></li>
+        <li><a href="/update">update</a></li>
+        <li><input type="button" value="delete"></input></li>
+      </ul> */}
+      <Control onChangeMode={function(_mode) {  // 모드에 따라서 welcome, read, create, update, delete
+        this.setState({
+          mode:_mode
+        })
+      }.bind(this)}></Control>
+      {_article} {/* 모드에 따라 다르게 출력*/}
     </div>
     );
   }
