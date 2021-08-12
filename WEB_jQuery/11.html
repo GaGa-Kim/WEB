@@ -1,0 +1,37 @@
+<!-- ajax : 자바스크립트를 이용해서 비동기식으로 서버와 통신하는 방식 -->
+<!--
+(1-1) 웹페이지
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <script src="http://code.jquery.com/jquery-latest.js"></script>
+        </head>
+        <body>
+            <div id="result"></div>
+            <input type="text" id="msg" />
+            <input type="button" value="get result" id="getResult" />
+            <script>
+                $('#getResult').click( function() {
+                    $('#result').html('');  // 결과값을 지워주고 밑의 내용을 작성하도록
+                    $.ajax({
+                        url:'http://opentutorials.org/example/jquery/example.jquery.ajax.php',
+                        dataType:'json',
+                        type:'POST',
+                        data:{'msg':$('#msg').val()},
+                        success:function(result){
+                            if(result['result']==true){
+                            $('#result').html(result['msg']);
+                            }
+                        }
+                    });
+                })
+            </script>
+        </body>
+    </html>
+
+(1-2) 서버 쪽 로직
+    <?
+    // json 형식
+    echo json_encode(array('result'=>true, 'msg'=>$_REQUEST['msg']));  // 사용자가 전달한 데이터가 php 변수인 REQUEST에 저장됨
+    ?>
+-->
