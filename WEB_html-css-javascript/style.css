@@ -1,0 +1,54 @@
+/* style.css -> 중복의 제거
+a : 선택자(selector) / color:black; : 효과, 선언(delclaration) / color : 속성(property) / red; : property value
+// CSS 삽입 방법 1 : style 태그(element)를 쓴다.
+.saw : 웹 페이지에 있는 클래스가 saw인 태그를 가리키는 선택 / #active : id 값이 active인 태그를 선택
+즉, 아이디 선택자가 클래스 선택자보다 우선순위 / 아이디 선택자 > 클래스 선택자 > 태그 선택자
+아이디의 값은 단 한 번만 등장, 구체적인 것이 포괄적인 것보다 우선순위가 높도록 */
+
+a {
+  text-decoration: none;
+}
+#active {
+  color: red;
+}
+.saw {
+  color: gray;
+}
+h1 {
+  font-size: 45px;
+  text-align: center;
+  border-bottom: 1px solid gray;
+  margin: 0;
+  padding: 20px;
+}
+ol {
+  border-right: 1px solid gray;
+  width: 100px;
+  margin: 0;
+  padding: 20px;
+}
+body {
+  margin: 0;
+}
+#grid { /* 한 열에 배치하도록 div로 묶은 후, ol은 150px(고정), h2, p은 나머지 공간에(fr : 자동 조정) */
+  display: grid;
+  grid-template-columns: 150px 1fr;
+}
+#grid ol {
+  padding-left: 33px;
+}
+#grid #article {
+  padding-left: 25px;
+}
+/* 스크린의 크기가 800px보다 작을 때 screen width < 800px */
+@media(max-width: 800px) {
+  #grid {
+    display: block; /* grid 였던 것이 block으로 바뀌게 됨 */
+  }
+  ol { /* 오른쪽 테두리를 지움 */
+    border-right: none;
+  }
+  h1 { /* 위쪽 테두리를 지움 */
+    border-bottom: none;
+  }
+}
