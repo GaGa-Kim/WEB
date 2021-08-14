@@ -1,0 +1,170 @@
+<!-- 엘리먼트 제어 -->
+<!--
+(1) 자식으로 삽입 (.append(), .appendTo(), .html(), .prepend(), .prependTo(), .text())    
+    -> <p> 태그 안에 삽입
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <style>
+                p {
+                    background:yellow;
+                }
+            </style>
+            <script src="http://code.jquery.com/jquery-latest.js"></script>
+        </head>
+        <body>
+            <p>
+                I would like to say:
+            </p>
+            <script>$("p").append("<strong>Hello</strong>");</script>
+        </body>
+    </html>
+
+(2) 형제로 삽입 (.after(), .before(), .insertAfter(), .insertBefore())
+    -> <p> 태그 밑에 삽입
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <style>
+                p {
+                    background:yellow;
+                }
+            </style>
+            <script src="http://code.jquery.com/jquery-latest.js"></script>
+        </head>
+        <body>
+            <p>
+                I would like to say:
+            </p>
+            <script>$("p").after("<b>Hello</b>");</script>
+        </body>
+    </html>
+
+(3) 부모로 감싸기 (.unwrap(), .wrap(), .wrapAll(), .wrapInner())
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <style>
+                div {
+                    border:2px blue solid;
+                    margin:2px;
+                    padding:2px;
+                }
+                p {
+                    background:yellow;
+                    margin:2px;
+                    padding:2px;
+                }
+                strong {
+                    color:red;
+                }
+            </style>
+            <script src="http://code.jquery.com/jquery-latest.js"></script>
+        </head>
+        <body>
+            <span>Span Text</span>
+            <strong>What about me?</strong>
+            <span>Another One</span>
+            <script>$("span").wrap("<div><div><p><em><b></b></em></p></div></div>");</script>
+        </body>
+    </html>
+
+(4) 삭제 (.detach(), .empty(), .remove(), .unwrap())
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <style>
+                p {
+                    background:yellow;
+                    margin:6px 0;
+                }
+            </style>
+            <script src="http://code.jquery.com/jquery-latest.js"></script>
+        </head>
+        <body>
+            <p>
+                Hello
+            </p>
+            how are
+            <p>
+                you?
+            </p>
+            <button>
+                Call remove() on paragraphs
+            </button>
+            <script>
+                $("button").click( function () {
+                    $("p").remove();
+                });
+            </script>
+        </body>
+    </html>
+
+(5) 치환 (.replaceAll(), .replaceWith())
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <script src="http://code.jquery.com/jquery-latest.js"></script>
+        </head>
+        <body>
+            <p> Hello </p>
+            <p> cruel </p>
+            <p> World </p>
+            <script>$("<b>Paragraph. </b>").replaceAll("p"); // check replaceWith() examples        </script>
+        </body>
+    </html>
+
+(6) 클래스 (.addClass(), .hasClass(), .removeClass(), .toggleClass())
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <style>p {
+                    margin: 4px;
+                    font-size:16px;
+                    font-weight:bolder;
+                    cursor:pointer;
+                }
+                .blue {
+                    color:blue;
+                }
+                .highlight {
+                    background:yellow;
+                }
+            </style>
+            <script src="http://code.jquery.com/jquery-latest.js"></script>
+        </head>
+        <body>
+            <p class="blue"> Click to toggle </p>
+            <p class="blue highlight"> highlight </p>
+            <p class="blue"> on these </p>
+            <p class="blue"> paragraphs </p>
+            <script>
+                $("p").click( function () {
+                    $(this).toggleClass("highlight"); // highligt가 클래스 명에 없으면 추가, 있으면 제거
+                });
+            </script>
+        </body>
+    </html>
+
+(7) 속성제어 (.attr(), .prop(), .removeAttr(), .removeProp(), .val())
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <style>p {
+                    color:blue;
+                    margin:8px;
+                }
+            </style>
+            <script src="http://code.jquery.com/jquery-latest.js"></script>
+        </head>
+        <body>
+            <input type="text" value="some text"/>
+            <p>
+            </p>
+            <script>$("input").keyup( function () {
+                    var value = $(this).val();  // 엘리먼트가 가지고 있는 value값 리턴
+                    $("p").text(value);
+                }).keyup();</script>
+        </body>
+    </html>
+--> 

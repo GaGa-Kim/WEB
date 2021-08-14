@@ -1,0 +1,84 @@
+<!-- event -->
+<!-- bind로 이벤트 핸들러를 설치하고, unbind로 제거 (예제1)
+     trigger로 이벤트 핸들러를 강제로 실행 (예제2)
+     click, ready와 같이 다양한 이벤트 헬퍼(helper)를 제공함
+     live를 이용하면 현재 존재 하지 않는 엘리먼트에 이벤트 핸들러를 설치할 수 있음 
+    
+(1) bind, unbind, trigger를 이용한 이벤트의 설치, 제거, 호출 -->
+    <html>
+        <head>
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+            <script type="text/javascript">
+                function clickHandler(e){
+                    alert('thank you');
+                }
+                $(document).bind('ready', function(){  // 이벤트 설치 전 밑의 input들이 제대로 실행되었는지 체크하는 ready
+                    $('#click_me').bind('click', clickHandler);
+                    $('#remove_event').bind('click', function(e){
+                        $('#click_me').unbind('click', clickHandler); // 위(click_me)의 이벤트가 삭제되는 것 (이벤트 제거)
+                    });
+                    $('#trigger_event').bind('click', function(e){
+                        $('#click_me').trigger('click');  // trigger를 이용해 click_me의 이벤트를 호출해주는 것 (강제로 호출)
+                    });
+                })
+            </script>
+        </head>
+        <body>
+            <input id="click_me" type="button" value="click me" />
+            <input id="remove_event" type="button" value="unbind" />
+            <input id="trigger_event" type="button" value="trigger" />
+        </body>
+    </html>
+
+<!-- (2) 이벤트 헬퍼
+    <html>
+        <head>
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+            <script type="text/javascript">
+                function clickHandler(e){
+                    alert('thank you');
+                }
+                $(document).ready(function(){
+                    $('#click_me').click(clickHandler);
+                    $('#remove_event').click(function(e){
+                        $('#click_me').unbind('click', clickHandler);
+                    });
+                    $('#trigger_event').click(function(e){
+                        $('#click_me').trigger('click');
+                    });
+                })
+            </script>
+        </head>
+        <body>
+            <input id="click_me" type="button" value="click me" />
+            <input id="remove_event" type="button" value="unbind" />
+            <input id="trigger_event" type="button" value="trigger" />
+        </body>
+    </html>
+
+(3) live를 이용하면 존재하지 않는 엘리먼트에 대해서 이벤트를 설치할 수 있다.
+    <html>
+        <head>
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+            <script type="text/javascript">
+                function clickHandler(e) {
+                    alert('thank you');
+                }
+                $('#click_me').live('click', clickHandler);
+                $('#remove_event').live('click', function(e) {
+                    $('#click_me').die('click', clickHandler);
+                });
+                $('#trigger_event').live('click', function(e) {
+                    $('#click_me').trigger('click');
+                });
+            </script>
+        </head>
+        <body>
+            <input id="click_me" type="button" value="click me" />
+        <input id="remove_event" type="button" value="unbind" />
+        <input id="trigger_event" type="button" value="trigger" />
+        </body>
+    </html>
+
+
+-->

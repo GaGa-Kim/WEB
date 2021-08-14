@@ -1,0 +1,75 @@
+<!-- 폼 -->
+<!--
+(1) (.focus(), .blur(), .change(), .select())
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <style>
+                span {
+                }
+            </style>
+            <script src="http://code.jquery.com/jquery-latest.js"></script>
+        </head>
+        <body>
+            <p>
+                <input type="text" />
+                <span></span>
+            </p>
+            <script>
+                // input 클릭 시 focus, input 밖을 클릭 시 blur 출력
+                $("input").focus( function () {
+                    $(this).next("span").html('focus');  // next("span") : 형제 엘리먼트 중에서 span 엘리먼트를 찾아라
+                }).blur( function() {
+                    $(this).next("span").html('blur');
+                }).change(function(e){
+                    alert('change!! '+$(e.target).val());  // e.target == this
+                }).select(function(){
+                    $(this).next('span').html('select');
+                });
+            </script>
+        </body>
+    </html>
+
+(2) (.submit(), .val())
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <style>
+                p {
+                    margin:0;
+                    color:blue;
+                }
+                div, p {
+                    margin-left:10px;
+                }
+                span {
+                    color:red;
+                }
+            </style>
+            <script src="http://code.jquery.com/jquery-latest.js"></script>
+        </head>
+        <body>
+            <p>
+                Type 'correct' to validate.
+            </p>
+            <form action="javascript:alert('success!');">
+                <div>
+                    <input type="text" />
+    
+                    <input type="submit" />
+                </div>
+            </form>
+            <span></span>
+            <script>
+                $("form").submit( function() {
+                    if ($("input:first").val() == "correct") {  // input:first == input type="text"를 선택한 것
+                        $("span").text("Validated...").show();
+                        return true;
+                    }
+                    $("span").text("Not valid!").show().fadeOut(1000);
+                    return false;
+                });
+            </script>
+        </body>
+    </html>
+-->

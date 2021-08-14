@@ -1,0 +1,45 @@
+<!-- chain -->
+<!--
+(1) jQuery를 이용해서 코딩하는 경우 -->
+    <html>
+        <body>
+            <a id="tutorial" href="http://jquery.com" target="_self">jQuery</a>
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+            <script type="text/javascript">
+                jQuery('#tutorial').attr('href', 'http://jquery.org').attr('target', '_blank').css('color', 'red'); // 연속적으로 명령
+            </script>
+        </body>
+    </html>
+<!--
+(2) javascript의 DOM을 이용해서 코딩하는 경우
+    <html>
+        <body>
+            <a id="tutorial" href="http://jquery.com" target="_self">jQuery</a>
+            <script type="text/javascript">
+                var tutorial = document.getElementById('tutorial');
+                tutorial.setAttribute('href', 'http://jquery.org');
+                tutorial.setAttribute('target', '_blank');
+                tutorial.style.color = 'red';
+            </script>
+        </body>
+    </html>
+
+(3) traversing을 이용해서 chain안에서 대상을 움직일 수 있다.
+    <html>
+        <body>
+            <ul class="first">
+                <li class="foo"> list item 1 </li>  // -> red
+                <li> list item 2 </li>
+                <li class="bar"> list item 3 </li>  // -> green
+            </ul>
+            <ul class="second">
+                <li class="foo"> list item 1 </li>
+                <li> list item 2 </li>
+                <li class="bar"> list item 3 </li>
+            </ul>
+            <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+            // end로 인해서 앞의 find가 취소가 되는 것 (ul.first -> .foo -> ul.first -> .bar)
+            <script type="text/javascript">$('ul.first').find('.foo').css('background-color', 'red').end().find('.bar').css('background-color', 'green');</script>  
+        </body>
+    </html>
+-->

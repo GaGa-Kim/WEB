@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <article>
+    
+  </article>
+  <body>
+    <input type="button" value="fetch" onclick="
+      /*
+      fetch('html').then(function(response){
+        response.text().then(function(text){
+          alert(text);
+        })
+      }) */
+      
+      /* 이름이 없는 잉여 함수
+      fetch('html').then(function(response){
+        response.text().then(function(text){
+          document.querySelector('article').innerHTML = text;
+        })
+      }) */
+      
+      /* 해설 - then 안에서만 독점적으로 사용하는 callbackme 함수이므로 이름을 가질 필요가 없음
+      fetch('html') -> 인자로 전달된 데이터를 서버에게 요청
+      then -> 서버가 응답할 때까지 다른 일을 하기 위해 then 기능을 사용
+      예) 응답이 끝나면 callbackme라는 함수를 실행시키도록 약속 
+          만약 동기(synchronous)로 실행되었다면 요청이 시작되고 끝날 때까지 콘솔창에 1과 2가 실행되면 안됨. 즉 멈춰있어야 함. 
+          반대로 비동기적인(Asynchronous) 실행은 fetch가 실행되고 있는 동안에 다른 코드들이 실행되어 콘솔창에 1과 2가 동시에 실행됨 
+          밑은 동시에 실행되어 1 2 response end 출력이 됨. 즉, Ajax의 A는 비동기의 A 
+      
+          function callbackme() {
+            console.log('response end');
+          }
+          
+          fetch('html').then(callbackme);
+          console.log(1);
+          console.log(2); 
+          
+          -> 위를 바꾸면
+          
+          callbackme = function() {
+            console.log('response end');
+          }
+          
+          fetch('html').then(callbackme);
+          console.log(1);
+          console.log(2); 
+          
+          -> 그리고 callbackme 함수를 then 안에 넣을 수 있으므로 바뀌며,
+             밑처럼 callbackme 함수를 주게 되면 callbackme 함수를 fetch가 실행시킬 때,
+             함수에 첫번째 인자의 값으로 respose 객체를 주게 되어 호출하게 됨 
+             이를 실행하게 되면 콘솔창에 respose 객체의 여러 속성 값이 나타나게 됨 
+
+          fetch('html').then(function(respose) {
+            console.log('response end');
+          });
+          console.log(1);
+          console.log(2); -> 이 때는 status가 200, 아래의 경우 javascript가 없으므로 404 */
+          
+          fetch('javascript').then(function(respose) {
+            if(respose.status == '404') {
+              alert('Not found')
+            }
+          });
+          console.log(1);
+          console.log(2);
+          
+          /* 즉, response 객체는 fetch를 통해서 요청을 했을 때 웹서버가 응답한 결과(여러 속성)를 담고 있는 객체(데이터) */ 
+      ">
+  </body>
+</html>
