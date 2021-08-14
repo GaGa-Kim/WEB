@@ -71,6 +71,7 @@ var template = {
 // http://opentutorials.org:3000/main?id=HTML&page=12의 경우 http는 protocol, opentutorials.org는 host(domain), 3000은 port, main은 path, id=HTML&page=12는 query string
 // createServer에 전달된 callback 함수, node.js로 웹브라우저가 접속이 들어올 때마다 callback 함수를 호출, 요청할 때 웹브라우저가 보낸 정보, 응답할 때 우리가 웹브라우저에게 전송할 정보를 인자로 가짐
 var app = http.createServer(function(request,response){  
+    var _url = request.url;
     var queryData = url.parse(_url, true).query;  // url에서 query string 부분만 가져온 것    
     
     // 사용자가 루트로 접근했는지 아닌지 구분. 즉, localhost:3000 뒤에 path 정보가 붙지 않는 것
