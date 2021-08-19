@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { registerUser } from '../../../_actions/user_action'
+import { withRouter } from 'react-router-dom' // history를 사용하기 위해서
 
 function RegisterPage(props) {
     const dispatch = useDispatch();
@@ -30,7 +31,7 @@ function RegisterPage(props) {
         event.preventDefault();
 
         if(Password !== ConfirmPassword) {
-            return alert('비밀번호와 비밀번호 왁인은 같아야 합니다.')
+            return alert('비밀번호와 비밀번호 확인은 같아야 합니다.')
         }
 
         let body = {
@@ -41,10 +42,10 @@ function RegisterPage(props) {
 
         dispatch(registerUser(body))
         .then(response => {
-            if(response.payload.loginSuccess) {
-                props.history.push('/')
+            if(response.payload.registerSuccess) {
+                props.history.push('/login')
             } else {
-                alert('Error')
+                alert('Filed to sign up')
             }
         }) 
     }
@@ -77,4 +78,4 @@ function RegisterPage(props) {
     )
 }
 
-export default RegisterPage
+export default withRouter(RegisterPage)
