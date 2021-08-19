@@ -1,2 +1,2 @@
 # WEB_nodejs
- 생활코딩 Node.js 수강
+ 생활 코딩 nodejs

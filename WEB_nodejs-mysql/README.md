@@ -1,2 +1,2 @@
 # WEB_nodejs-mysql
-Node.js-mysql Study
+생활코딩 Node.js-mysql Study
