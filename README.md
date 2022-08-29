@@ -1,11 +1,22 @@
-# WEB Front/Back 스터디 목록
-- [html-css-javascript](https://gaga-kim.tistory.com/entry/HTML-CSS-JavaScript-%EA%B0%9C%EB%85%90-%EB%B3%B5%EC%8A%B5?category=884602)
-- [jQuery](https://gaga-kim.tistory.com/entry/jQuery-jQuery%EC%9D%98-%EA%B0%9C%EB%85%90?category=884602)
-- [ajax](https://gaga-kim.tistory.com/entry/Ajax-Ajax%EC%9D%98-%EA%B0%9C%EB%85%90%EA%B3%BC-%EC%A0%81%EC%9A%A9?category=884602)
-- [nodejs](https://gaga-kim.tistory.com/entry/Nodejs-Nodejs%EC%9D%98-%EA%B0%9C%EB%85%90%EA%B3%BC-%EC%A0%81%EC%9A%A9?category=885425)
-- [nodejfs-mysql](https://gaga-kim.tistory.com/entry/Nodejs%EC%99%80-MySQL%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%9B%B9%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98?category=885425)
-- [nodejs-express](https://gaga-kim.tistory.com/entry/Nodejs-Express-Express%EC%9D%98-%EA%B0%9C%EB%85%90%EA%B3%BC-%EC%A0%81%EC%9A%A9?category=885425)
-- [react](https://gaga-kim.tistory.com/entry/React-React%EC%9D%98-%EA%B0%9C%EB%85%90%EA%B3%BC-%EC%A0%81%EC%9A%A9?category=885425)
-- [node-react](https://gaga-kim.tistory.com/entry/Nodejs-React-MongoDB-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EC%9B%B9-%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98-%EA%B5%AC%ED%98%84?category=885425)
-- [springboot](https://gaga-kim.tistory.com/category/WEB/Spring)
+# WEB Front/Back 스터디 목록 📗
+> 1. **html-css-javascript**<br/>
+[[HTML-CSS-JavaScript] 개념 복습](https://gaga-kim.tistory.com/120?category=884602)
+> 2. **jQuery**<br/>
+[[jQuery] jQuery의 개념](https://gaga-kim.tistory.com/117?category=884602)
+> 3. **ajax**<br/>
+[[Ajax] Ajax의 개념과 적용](https://gaga-kim.tistory.com/116?category=884602)
+> 4. **nodejs**<br/>
+[[Node.js] Node.js의 개념과 적용](https://gaga-kim.tistory.com/121?category=885425)
+> 5. **nodejs-mysql**<br/>
+[[Node.js-MySQL] Node.js와 MySQL을 이용한 웹애플리케이션](https://gaga-kim.tistory.com/119?category=885425)
+> 6. **nodejs-express**<br/>
+[[Node.js-Express] Express의 개념과 적용](https://gaga-kim.tistory.com/118?category=885425)
+> 7. **react**<br/>
+[[React] React의 개념과 적용](https://gaga-kim.tistory.com/122?category=885425)
+> 8. **node-react**<br/>
+[[Node.js-React-MongoDB] 로그인 웹 애플리케이션 구현](https://gaga-kim.tistory.com/123?category=885425)
+> 9. **Redux**<br/>
+[[Redux] Redux의 개념](https://gaga-kim.tistory.com/115?category=885425)
+> 10. **springboot**<br/>
+[[Spring Boot] 스프링 부트와 AWS로 혼자 구현하는 웹 서비스](https://gaga-kim.tistory.com/category/STUDY/Spring)
 
